@@ -64,7 +64,7 @@ def run_oracle(glyph_text: str, cols_instrs: int = 64,
     try:
         pixels, _labels = assemble_glyph_to_pixels(
             glyph_text, cols_instrs=cols_instrs, min_rows=16)
-    except Exception as e:  # SpatialMisalignmentFault + wordbase misses
+    except Exception as e:  # SpatialMisalignmentFault + decode errors
         return OracleResult(passed=False, error=f"assemble: {type(e).__name__}: {e}")
 
     # GH-20: fs_pix_enabled — FS-window LD/ST (words [1024,1280)) must

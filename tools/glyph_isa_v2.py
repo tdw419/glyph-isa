@@ -3,7 +3,7 @@
 Glyph Stratum Spatial ISA v1.0 — fixed-width, collision-safe pixel CPU.
 
 Every instruction is a 1x4 horizontal pixel block:
-    Pixel 0 (Opcode):    semantic RGB derived from wordbase.db
+    Pixel 0 (Opcode):    deterministic GLS-1.0 RGB triplet (PINNED_COLORS)
     Pixel 1 (Registers): R=rs1, G=rs2, B=rd  (0xFF = UNUSED_REGISTER)
     Pixel 2 (Imm-Low):   lower 24 bits of immediate/coordinate (RGB)
     Pixel 3 (Imm-High):  upper bits / flags / padding (black = unused)

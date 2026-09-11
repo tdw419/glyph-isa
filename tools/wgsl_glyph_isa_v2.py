@@ -23,8 +23,7 @@ implements glyph_isa_v2's actual fixed-width format:
 Opcode colors are pulled from OpcodeMapV2 at generation time (see
 generate_wgsl_opcode_table() below) rather than hand-copied, so this file
 never silently drifts from whatever tools/glyph_isa_v2.py currently
-resolves - regenerate the constant block if wordbase.db content changes
-the original 10 opcodes' colors.
+resolves (pinned to deterministic GLS-1.0 PINNED_COLORS).
 """
 
 import numpy as np
