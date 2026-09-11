@@ -1,0 +1,7 @@
+; 04_mailbox.glyph — Agent Mailbox IPC protocol
+; Demonstrates SYS 6/7/8 non-blocking mailbox packet exchange.
+; Packet format: cksum[31:24] | op[15:8] | payload[7:0]
+LDI r10 0x140101    ; op=1, payload=1, cksum=0x14
+LDI r17 6           ; SYS 6: post to mailbox
+SYSCALL r10
+HALT

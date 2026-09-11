@@ -1,0 +1,5 @@
+; 01_hello.glyph — Minimal print and halt
+; Demonstrates LDI, PRT, and clean HALT.
+LDI r10 42
+PRT r10
+HALT

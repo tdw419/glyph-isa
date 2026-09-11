@@ -1,0 +1,34 @@
+; 03_fibonacci.glyph — Fibonacci sequence using r31 hardware stack
+; Demonstrates CALL, RET, and stack management.
+LDI r31 1023        ; initialize stack pointer
+
+LDI r10 7           ; N = 7
+CALL :fib
+PRT r10             ; fib(7) = 13
+HALT
+
+:fib
+CMP r10 1
+JZ :base_case
+CMP r10 0
+JZ :base_case
+
+PUSH r10            ; save N
+LDI r2 1
+SUB r10 r2          ; N - 1
+CALL :fib
+LDI r11 0
+ADD r11 r10         ; r11 = fib(N - 1)
+
+POP r10             ; restore N
+PUSH r11            ; save fib(N - 1)
+LDI r2 2
+SUB r10 r2          ; N - 2
+CALL :fib           ; r10 = fib(N - 2)
+
+POP r11             ; restore fib(N - 1)
+ADD r10 r11         ; r10 = fib(N - 1) + fib(N - 2)
+RET
+
+:base_case
+RET
