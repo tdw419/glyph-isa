@@ -92,6 +92,13 @@ def test_gh25_leg1_cpu_wgsl_parity_across_page_swap():
     """THE leg: identical register state on CPU and WGSL when the paged
     window's backing frame is swapped (slot 5 -> slot 42) at the barrier,
     and byte-exact paged reads of DIFFERENT resident frames post-swap."""
+    try:
+        import wgpu, wgpu.utils
+        if wgpu.utils.get_default_device() is None:
+            pytest.skip("WGPU device unavailable (headless environment)")
+    except Exception as e:
+        pytest.skip(f"WGPU unavailable: {e}")
+
     from tools.glyph_gpt.gh25_hilbert_paging import hilbert_swap_image
 
     atlas = build_default_atlas()
