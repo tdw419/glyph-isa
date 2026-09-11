@@ -253,9 +253,12 @@ class GlyphAssemblerV2:
         instrs = []
         for line in lines:
             line = line.strip()
-            if not line or line.startswith('#'):
+            for c in (';', '#'):
+                if c in line:
+                    line = line.split(c)[0].strip()
+            if not line:
                 continue
-            parts = line.split()
+            parts = [p.rstrip(',') for p in line.split()]
             instrs.append(parts)
 
         n = len(instrs)
@@ -304,14 +307,17 @@ class GlyphAssemblerV2:
                 # entry point) rather than a fixed label.
                 rd = int(args[0][1:])
             elif opcode in ('PRT', 'PUSH', 'POP', 'SYSCALL'):
-                rd = int(args[0][1:])
-                # Parse immediate for SYSCALL
-                if opcode == 'SYSCALL' and len(args) > 1:
-                    imm_str = args[1]
-                    if imm_str.startswith('0x') or imm_str.startswith('0X'):
-                        imm = int(imm_str, 16)
-                    else:
-                        imm = int(imm_str)
+                if opcode == 'SYSCALL' and (args[0].isdigit() or args[0].startswith('0x') or args[0].startswith('0X')):
+                    imm = int(args[0], 0)
+                else:
+                    rd = int(args[0][1:])
+                    # Parse immediate for SYSCALL
+                    if opcode == 'SYSCALL' and len(args) > 1:
+                        imm_str = args[1]
+                        if imm_str.startswith('0x') or imm_str.startswith('0X'):
+                            imm = int(imm_str, 16)
+                        else:
+                            imm = int(imm_str)
             elif opcode in ('JMP', 'JZ', 'CALL'):
                 x, y = args[0].split(',')
                 imm = (int(y) << 16) | int(x)  # pack coord into imm

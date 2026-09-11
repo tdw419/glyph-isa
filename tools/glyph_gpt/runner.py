@@ -126,7 +126,7 @@ class GlyphRunner:
         receipt["halted"] = not cpu.running
         receipt["steps"] = int(steps)
         receipt["registers_full"] = [int(r) & 0xFFFFFFFF for r in cpu.registers]
-        receipt["registers"] = receipt["registers_full"][:8]
+        receipt["registers"], receipt["output"] = receipt["registers_full"][:8], list(getattr(cpu, "output", []))
         receipt["memory"] = [int(m) & 0xFFFFFFFF for m in cpu.memory]
         receipt["status_word_value"] = receipt["memory"][950]  # GH-8b write-through mirror
 

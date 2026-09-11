@@ -2,10 +2,11 @@
 ; In GLS-1.0, r0 is the comparison flag target, NOT hardwired zero.
 LDI r1 10
 LDI r2 1
+LDI r3 0
 
 :loop
 SUB r1 r2
-CMP r1 0
+CMP r1 r3
 JZ :done
 JMP :loop
 

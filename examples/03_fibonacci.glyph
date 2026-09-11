@@ -8,9 +8,11 @@ PRT r10             ; fib(7) = 13
 HALT
 
 :fib
-CMP r10 1
+LDI r3 1
+CMP r10 r3
 JZ :base_case
-CMP r10 0
+LDI r3 0
+CMP r10 r3
 JZ :base_case
 
 PUSH r10            ; save N

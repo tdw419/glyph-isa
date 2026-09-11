@@ -1172,13 +1172,23 @@ def assemble_glyph_to_pixels(
     Returns:
         (pixel_array, label_coordinates_map)
     """
-    raw_lines = [line.strip() for line in glyph_source.splitlines() if line.strip() and not line.startswith('#')]
+    raw_lines = []
+    for line in glyph_source.splitlines():
+        line = line.strip()
+        for c in (';', '#'):
+            if c in line:
+                line = line.split(c)[0].strip()
+        if line:
+            raw_lines.append(line)
 
     labels: Dict[str, int] = {}
     instr_count = 0
     for line in raw_lines:
-        if line.startswith(':'):
-            labels[line.split()[0]] = instr_count
+        if line.startswith(':') or line.endswith(':'):
+            lbl = line.split()[0].strip(':')
+            labels[':' + lbl] = instr_count
+            labels[lbl + ':'] = instr_count
+            labels[lbl] = instr_count
         else:
             instr_count += 1
 
@@ -1191,7 +1201,7 @@ def assemble_glyph_to_pixels(
     _pats = [(re.compile(r'(?<!\S)' + re.escape(lbl) + r'(?!\S)'), idx)
              for lbl, idx in sorted(labels.items(), key=lambda kv: -len(kv[0]))]
     for line in raw_lines:
-        if line.startswith(':'):
+        if line.startswith(':') or line.endswith(':'):
             continue
         for pat, idx in _pats:
             col = idx % cols_instrs
